@@ -1,37 +1,28 @@
 # 复旦自动刷锻脚本
 
-使用光华智慧体育小程序的 API 实现自动刷锻。使用帮助请看最后一节。
+使用光华智慧体育小程序的 API 实现自动刷锻。
+
+**GitHub Actions 因为运行时间过长，占用服务器资源，因此被禁用。没有计算机基础的同学请直接参考教程一节。**
 
 ## 使用
 
-**本节是本地运行脚本的说明，不会使用命令行的用户请直接参看「帮助」一节，使用 GitHub Actions 自动运行。**
+本节仅供本地配置有 Python 运行环境的用户使用。没有安装 Python 的用户请参考教程。
 
 - 安装依赖：`pip install -r requirements.txt`
-- 设置环境变量 `USER_ID, FUDAN_SPORT_TOKEN`，需要在小程序内抓包获得。
+- 修改 `settings.json` 文件中的 `USER_ID, FUDAN_SPORT_TOKEN` 变量，需要在小程序内抓包获得，详请查看“抓包教程”章节。
 - 查看刷锻路线列表：`python main.py --view`
 - 自动刷锻：`python main.py --route <route_id>`，其中 `route_id` 是刷锻路线列表中的 ID。
 - 可以设置里程和时间，如 `--distance 1200 --time 360`，更多选项请使用 `python main.py --help` 查看。
 - （附加）环境变量 `PLATFORM_OS, PLATFORM_DEVICE` 可以设置刷锻的设备标识，默认值为 `iOS 2016.3.1`
   、`iPhone|iPhone 13<iPhone14,5>`。
 
-## 自动运行
-
-Fork 本仓库，并设置 Secret `USER_ID, FUDAN_SPORT_TOKEN` 即可自动在规定时间刷锻。
-
 ## 说明
 
-目前只支持南区田径场和菜地，其他体育场的经纬度坐标有待完善。
+目前支持的场地有菜地、南区田径场和江湾田径场。
 
-## 贡献
+## 教程
 
-欢迎参与贡献本项目。本项目目前需要完善的内容包括：
-
-- 支持更多运动场地的坐标
-- 直接在脚本内使用 UIS 密码获取 Token，免去抓包的需要
-
-## 帮助
-
-为了方便没有计算机基础知识的同学运行此脚本，特附上使用教程。
+在运行前，需要抓包获取 User ID 和 Token。
 
 ### 抓包教程
 
@@ -51,34 +42,41 @@ Request Line 中有 `userid=xxx&token=xxx` 的记录，记下这两段信息。
 from browers only 改为 from all processes。
 
 在配置完后，微信登录，右上角齿轮进入代理，端口为 127.0.0.1，端口号为 8888（默认）
-登录后进入小程序并登录，在 fiddler 里找到下图中的 ID 和 token
+登录后进入小程序并登录，在 Fiddler 里找到下图中的 ID 和 token
 ![image](https://user-images.githubusercontent.com/51439899/226794395-42eca333-fb65-4e29-a2cb-b8ce3fd13221.png)
 
 **注意，目前 Token 的有效期为 3 天。**
 
-### 自动部署配置教程
+获取到 User ID 和 Token 后，按照下文的说明本地运行脚本。
 
-首先，你需要注册一个 GitHub 账户，并登录该账户。
+### 运行教程
 
-在 GitHub 页面顶部，点按按钮 Fork - Create new fork，将项目复制到自己账户名下，然后点击页面右上角自己的头像 - Your repositories -
-fudan-sport-automate 进入自己刚刚复制的项目，依次点击 Settings - Secrets and variables -
-Actions - New repository secret，并分别新建名为 `USER_ID` 和 `FUDAN_SPORT_TOKEN` 的两个 Secret（Secret
-的值分别为刚才记下的两个值）。配置完成后脚本将在每天早中晚的刷锻时间自动运行。
+点击页面右侧的 Release 链接（带有绿色 Latest 标签），然后在页面下方的 Assets 中选择一个下载。Windows 系统下载 `windows.zip`
+，macOS 系统下载 `macos.zip`。下载后，解压得到一个 `main` 文件夹。
 
-GitHub 中对 Fork 的仓库不会启用脚本自动运行，因此请点击页面顶部的 Actions，然后分别点击页面左侧的 Morning
-Exercise、Afternoon Exercise、Evening Exercise，然后在每个页面中分别点击按钮 Enable workflow 以启用自动运行。
+#### Windows
 
-更新 Token 时，依次点击 Settings - Secrets and variables - Actions，找到 Repository secrets
-一栏，点击下方 `FUDAN_SPORT_TOKEN` 右侧的铅笔按钮，更新 Token 的值。
+打开 `main` 文件夹，右键单击文件 `settings.json`，打开方式 - 记事本，然后将其中 `USER_ID` 和 `FUDAN_SPORT_TOKEN`
+两项后面的内容改成刚刚抓包抓到的值（保留引号）。
 
-（可选）如果需要自定义设备标识，可以新建名为 `PLATFORM_OS, PLATFORM_DEVICE` 的 Secret，见「使用」一节。
+按快捷键 `Win + R`，输入 `cmd` 回车，会打开一个黑色窗口。输入 `cd + [空格]`，然后把 `main` 文件夹拖拽到黑色窗口内，按回车。
 
-（可选）如果需要选择其他的跑步路线，请在 `.github/workflows/*.yaml` 中修改对应的参数，默认为南区体育场，可以修改为菜地。具体操作此处不详述，有需求的用户请自行学习用法。
+- 输入命令 `.\main.exe -v` 并按回车，可以查看刷锻路线列表。
+- 输入命令 `.\main.exe -r 28` 并按回车，可以开始刷锻。需要参考上面一条命令的输出，把 28
+  替换成你需要的数字。这条命令需要执行数分钟，执行结束后会输出 `FINISHED: ***` 字样。
 
-### 更新
+#### macOS
 
-本仓库可能会不时新增功能和修复 bug，如果你已经 Fork 本仓库，在自己复制的仓库上方可以看到一条提示：This branch is * commits
-behind ***，点击 Sync fork，然后点击 Update branch 即可同步到最新版本。
+打开 `main` 文件夹，右键单击文件 `settings.json`，打开方式 - 文本编辑，然后将其中 `USER_ID` 和 `FUDAN_SPORT_TOKEN`
+两项后面的内容改成刚刚抓包抓到的值（保留引号）。
+
+按快捷键 `Command + [空格]`，输入「终端」，然后打开终端 App，是一个黑色/白色的窗口。输入 `cd + [空格]`，然后把 `main`
+文件夹拖拽到窗口内，按回车。
+
+- 输入命令 `./main -v` 并按回车，可以查看刷锻路线列表。
+- 输入命令 `./main -r 28` 并按回车，可以开始刷锻。需要参考上面一条命令的输出，把 28
+  替换成你需要的数字。这条命令需要执行数分钟，执行结束后会输出 `FINISHED: ***` 字样。
+- 如果出现 `permission denied` 报错，则输入命令 `chmod +x ./main` 并按回车，然后重新执行命令。
 
 ### Issue
 

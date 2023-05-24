@@ -1,16 +1,17 @@
-from geopy.distance import distance
 import random
+from math import pi
+
+from geopy.distance import distance
 from geopy.point import Point
 
 l = 86.96
 r = 36.5
-Pi = 3.1415926
-c = Pi * r
+c = pi * r
 d = 400
 
 
 def rad2ang(rad):
-    return (rad / Pi) * 180
+    return (rad / pi) * 180
 
 
 class Playground:
@@ -45,13 +46,14 @@ class Playground:
         coord = self.coordinate(x)
         return distance(meters=offset).destination(coord, angle)
 
+
 playgrounds = {
-    38: Playground(Point(31.291805, 121.502805), 180), # 邯郸南区田径场夜跑
-    33: Playground(Point(31.291805, 121.502805), 180), # 邯郸南区田径场课外活动
+    38: Playground(Point(31.291805, 121.502805), 180),  # 邯郸南区田径场夜跑
+    33: Playground(Point(31.291805, 121.502805), 180),  # 邯郸南区田径场课外活动
     28: Playground(Point(31.291805, 121.502805), 180),  # 邯郸南区田径场早操
-    34: Playground(Point(31.296757,121.507009), 216.5), # 菜地课外
-    39: Playground(Point(31.296757,121.507009), 216.5), # 菜地夜跑
-    35: Playground(Point(31.335097,121.502149),166.3), #江湾课外
-    40: Playground(Point(31.335097,121.502149),166.3), #江湾夜跑
-    30: Playground(Point(31.335097,121.502149),166.3) #江湾早锻炼
+    34: Playground(Point(31.296757, 121.507009), 216.5),  # 菜地课外
+    39: Playground(Point(31.296757, 121.507009), 216.5),  # 菜地夜跑
+    35: Playground(Point(31.335097, 121.502149), 166.3),  # 江湾课外
+    40: Playground(Point(31.335097, 121.502149), 166.3),  # 江湾夜跑
+    30: Playground(Point(31.335097, 121.502149), 166.3)  # 江湾早锻炼
 }
